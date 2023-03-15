@@ -1,50 +1,49 @@
-#include "main.h" 
- #include <stdlib.h> 
- /** 
-   *argstostr - concatenates all arguments of the program. 
-   *@ac: argument count. 
-   *@av: pointer to array of size ac. 
-   *Return: NULL if ac == 0 or av == null, Pointer to new string. 
-   *NULL on fail. 
-   */ 
- char *argstostr(int ac, char **av) 
- { 
-         int i, j, k, size; 
-         char *arg; 
-  
-         size = 0; 
-         k = 0; 
-         if (ac == 0 || av == NULL) 
-                 return (NULL); 
-         i = 0; 
-         while (i < ac) 
-         { 
-                 j = 0; 
-                 while (av[i][j]) 
-                 { 
-                         size++; 
-                         j++; 
-                 } 
-                 size++; 
-                 i++; 
-         } 
-         arg = malloc((sizeof(char) * size) + 1); 
-         if (arg == NULL) 
-                 return (NULL); 
-         i = 0; 
-         while (i < ac) 
-         { 
-                 j = 0; 
-                 while (av[i][j]) 
-                 { 
-                         arg[k] = av[i][j]; 
-                         j++; 
-                         k++; 
-                 } 
-                 arg[k] = '\n'; 
-                 k++; 
-                 i++; 
-         } 
-         arg[k] = '\0'; 
-         return (arg); 
- }
+#include "main.h"
+#include <stdlib.h>
+
+/**
+ * argstostr - concatenates all the arguments of your program.
+ * @ac: arguments count
+ * @av: arguments vector
+ *
+ * Return: a pointer to a new string, or NULL if it fails
+ */
+char *argstostr(int ac, char **av)
+{
+	char *str, *s;
+	int i, j, k, len = 0;
+
+	if (ac == 0 || av == NULL)
+		return (NULL);
+
+	for (i = 0; i < ac; i++)
+	{
+		s = av[i];
+		j = 0;
+
+		while (s[j++])
+			len++;
+		len++;
+	}
+
+	str = (char *)malloc(sizeof(char) * (len + 1));
+	if (str == NULL)
+		return (NULL);
+
+	for (i = 0, j = 0; i < ac && j < len; i++)
+	{
+		s = av[i];
+		k = 0;
+
+		while (s[k])
+		{
+			str[j] = s[k];
+			k++;
+			j++;
+		}
+		str[j++] = '\n';
+	}
+	str[j] = '\0';
+
+	return (str);
+}
