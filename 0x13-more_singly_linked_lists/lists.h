@@ -4,9 +4,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* This is singly linked list node structure
- *Made @SAMUEL
-*/
+/**
+ * This is singly linked lists structures 
+ *
+ */
 typedef struct listint_s
 {
 	int n;
