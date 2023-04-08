@@ -1,48 +1,56 @@
 #include "main.h"
+#include <string.h>
 
 /**
- * read_file_content - reads a file and writes its content to stdout
- * @filename: the name of the file to read
- * @bytes: the number of bytes to read and write
- * Return: the number of bytes printed to stdout or 0 on failure
+ * append_content_to_file - appends content to a file
+ * @filename: the name of the file to append content to
+ * @content: the content to append to the file
+ *
+ * Return: 1 on success, -1 on failure
  */
-ssize_t read_file_content(const char *filename, size_t bytes)
+int append_content_to_file(const char *filename, char *content)
 {
-    ssize_t bytes_read, bytes_written;
-    int file_descriptor;
-    char *buffer;
+	int fd, num_written;
 
-    if (filename == NULL)
-        return (0);
+	if (!filename)
+		return (-1);
 
-    buffer = malloc(sizeof(char) * bytes + 1);
-    if (buffer == NULL)
-        return (0);
+	fd = open(filename, O_WRONLY | O_APPEND);
+	if (fd == -1)
+		return (-1);
 
-    file_descriptor = open(filename, O_RDONLY);
-    if (file_descriptor == -1)
-    {
-        free(buffer);
-        return (0);
-    }
+	num_written = write(fd, content, strlen(content));
+	close(fd);
 
-    bytes_read = read(file_descriptor, buffer, sizeof(char) * bytes);
-    if (bytes_read == -1)
-    {
-        free(buffer);
-        close(file_descriptor);
-        return (0);
-    }
+	if (num_written == -1)
+		return (-1);
 
-    bytes_written = write(STDOUT_FILENO, buffer, bytes_read);
-    if (bytes_written == -1)
-    {
-        free(buffer);
-        close(file_descriptor);
-        return (0);
-    }
+	return (1);
+}
 
-    free(buffer);
-    close(file_descriptor);
-    return (bytes_written);
+/**
+ * create_file - creates a file and writes content to it
+ * @filename: the name of the file to create
+ * @content: the content to write to the file
+ *
+ * Return: 1 on success, -1 on failure
+ */
+int create_file(const char *filename, char *content)
+{
+	int fd, num_written;
+
+	if (!filename)
+		return (-1);
+
+	fd = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0600);
+	if (fd == -1)
+		return (-1);
+
+	num_written = write(fd, content, strlen(content));
+	close(fd);
+
+	if (num_written == -1)
+		return (-1);
+
+	return (1);
 }
