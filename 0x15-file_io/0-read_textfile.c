@@ -1,56 +1,42 @@
 #include "main.h"
-#include <string.h>
-
 /**
- * append_content_to_file - appends content to a file
- * @filename: the name of the file to append content to
- * @content: the content to append to the file
- *
- * Return: 1 on success, -1 on failure
- */
-int append_content_to_file(const char *filename, char *content)
+* read_textfile - check the code for Holberton School students.
+* @filename: file to read and write
+* @letters: number of letters to read and write.
+* Return: letters printed
+*/
+ssize_t read_textfile(const char *filename, size_t letters)
 {
-	int fd, num_written;
+	ssize_t nletters;
+	int file;
+	char *text;
 
 	if (!filename)
-		return (-1);
-
-	fd = open(filename, O_WRONLY | O_APPEND);
-	if (fd == -1)
-		return (-1);
-
-	num_written = write(fd, content, strlen(content));
-	close(fd);
-
-	if (num_written == -1)
-		return (-1);
-
-	return (1);
-}
-
-/**
- * create_file - creates a file and writes content to it
- * @filename: the name of the file to create
- * @content: the content to write to the file
- *
- * Return: 1 on success, -1 on failure
- */
-int create_file(const char *filename, char *content)
-{
-	int fd, num_written;
-
-	if (!filename)
-		return (-1);
-
-	fd = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0600);
-	if (fd == -1)
-		return (-1);
-
-	num_written = write(fd, content, strlen(content));
-	close(fd);
-
-	if (num_written == -1)
-		return (-1);
-
-	return (1);
+		return (0);
+	text = malloc(sizeof(char) * letters + 1);
+	if (text == NULL)
+		return (0);
+	file = open(filename, O_RDONLY);
+	if (file == -1)
+	{
+		free(text);
+		return (0);
+	}
+	nletters = read(file, text, sizeof(char) * letters);
+	if (nletters == -1)
+	{
+		free(text);
+		close(file);
+		return (0);
+	}
+	nletters = write(STDOUT_FILENO, text, nletters);
+	if (nletters == -1)
+	{
+		free(text);
+		close(file);
+		return (0);
+	}
+	free(text);
+	close(file);
+	return (nletters);
 }
