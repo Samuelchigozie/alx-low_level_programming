@@ -6,9 +6,9 @@
  *
  * Return: The number of bits required to flip in order to reach from n to m.
  */
-unsigned int flip_bits(unsigned long int num1, unsigned long int num2)
+unsigned int flip_bits(unsigned long int n, unsigned long int m)
 {
-	unsigned long int xor_result = num1 ^ num2, bit_count = 0;
+	unsigned long int xor_result = n ^ m, bit_count = 0;
 
 	while (xor_result > 0)
 	{
